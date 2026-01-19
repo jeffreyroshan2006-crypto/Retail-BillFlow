@@ -43,7 +43,7 @@ export default function BillsPage() {
                     <TableCell>
                       <Badge variant="outline" className="capitalize">{bill.paymentMode}</Badge>
                     </TableCell>
-                    <TableCell className="text-right font-bold">${bill.grandTotal}</TableCell>
+                    <TableCell className="text-right font-bold">₹{bill.grandTotal}</TableCell>
                     <TableCell className="text-right">
                       <button className="text-primary hover:underline text-sm flex items-center justify-end w-full">
                         <FileText className="h-3 w-3 mr-1" /> View

@@ -49,13 +49,13 @@ export function CheckoutModal({ isOpen, onClose, onConfirm, totalAmount, isProce
           <div className="space-y-2">
             <Label>Bill Total</Label>
             <div className="text-3xl font-bold text-primary">
-              ${totalAmount.toFixed(2)}
+              ₹{totalAmount.toFixed(2)}
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Discount Amount ($)</Label>
+              <Label>Discount Amount (₹)</Label>
               <Input 
                 type="number" 
                 min="0"
@@ -68,7 +68,7 @@ export function CheckoutModal({ isOpen, onClose, onConfirm, totalAmount, isProce
             <div className="space-y-2">
               <Label>Final Amount</Label>
               <div className="h-10 px-3 py-2 rounded-md bg-muted font-mono font-semibold flex items-center">
-                ${finalTotal.toFixed(2)}
+                ₹{finalTotal.toFixed(2)}
               </div>
             </div>
           </div>

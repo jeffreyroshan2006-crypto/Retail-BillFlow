@@ -125,48 +125,88 @@ async function seed() {
       name: "System Admin",
       role: "admin",
     });
-    
-    // Seed Products
-    await storage.createProduct({
-      name: "Organic Milk 1L",
-      category: "Dairy",
-      sku: "MILK001",
-      stockQuantity: 50,
-      purchasePrice: "45.00",
-      sellingPrice: "60.00",
-      taxRate: "5.00",
-      supplierId: null,
-      expiryDate: "2024-12-31"
-    });
-    
-    await storage.createProduct({
-      name: "Whole Wheat Bread",
-      category: "Bakery",
-      sku: "BRD001",
-      stockQuantity: 20,
-      purchasePrice: "30.00",
-      sellingPrice: "45.00",
-      taxRate: "0",
-      supplierId: null,
-      expiryDate: "2024-05-20"
-    });
-    
-    await storage.createProduct({
-      name: "Wireless Mouse",
-      category: "Electronics",
-      sku: "TECH001",
-      stockQuantity: 15,
-      purchasePrice: "400.00",
-      sellingPrice: "850.00",
-      taxRate: "18.00",
-      supplierId: null,
-      expiryDate: null
-    });
+  }
+
+  const products_list = await storage.getProducts();
+  if (products_list.length <= 3) {
+    // Seed Products with INR prices
+    const seedProducts = [
+      {
+        name: "Aashirvaad Shudhh Chakki Atta 5kg",
+        category: "Groceries",
+        sku: "ATTA001",
+        stockQuantity: 100,
+        purchasePrice: "210.00",
+        sellingPrice: "245.00",
+        taxRate: "0",
+        supplierId: null,
+        expiryDate: "2024-12-31"
+      },
+      {
+        name: "Amul Butter 500g",
+        category: "Dairy",
+        sku: "BTR001",
+        stockQuantity: 50,
+        purchasePrice: "230.00",
+        sellingPrice: "275.00",
+        taxRate: "5.00",
+        supplierId: null,
+        expiryDate: "2024-06-30"
+      },
+      {
+        name: "Tata Tea Gold 1kg",
+        category: "Beverages",
+        sku: "TEA001",
+        stockQuantity: 40,
+        purchasePrice: "480.00",
+        sellingPrice: "625.00",
+        taxRate: "5.00",
+        supplierId: null,
+        expiryDate: "2025-01-01"
+      },
+      {
+        name: "Maggi 2-Minute Noodles 12pk",
+        category: "Snacks",
+        sku: "MAG001",
+        stockQuantity: 80,
+        purchasePrice: "140.00",
+        sellingPrice: "168.00",
+        taxRate: "12.00",
+        supplierId: null,
+        expiryDate: "2024-09-15"
+      },
+      {
+        name: "Surf Excel Matic Front Load 2kg",
+        category: "Cleaning",
+        sku: "DET001",
+        stockQuantity: 30,
+        purchasePrice: "380.00",
+        sellingPrice: "450.00",
+        taxRate: "18.00",
+        supplierId: null,
+        expiryDate: null
+      },
+      {
+        name: "Dettol Liquid Handwash Refill 1.5L",
+        category: "Personal Care",
+        sku: "HWS001",
+        stockQuantity: 25,
+        purchasePrice: "190.00",
+        sellingPrice: "230.00",
+        taxRate: "18.00",
+        supplierId: null,
+        expiryDate: "2025-05-10"
+      }
+    ];
+
+    for (const p of seedProducts) {
+      await storage.createProduct(p);
+    }
 
     await storage.createCustomer({
-      name: "John Doe",
-      phone: "9876543210",
-      email: "john@example.com",
+      name: "Rahul Sharma",
+      phone: "9123456780",
+      email: "rahul@example.in",
     });
   }
 }

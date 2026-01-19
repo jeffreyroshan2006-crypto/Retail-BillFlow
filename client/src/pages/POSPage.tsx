@@ -216,9 +216,9 @@ export default function POSPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start">
                       <h4 className="font-medium text-sm truncate" title={item.product.name}>{item.product.name}</h4>
-                      <p className="font-semibold text-sm ml-2">${(Number(item.product.sellingPrice) * item.quantity).toFixed(2)}</p>
+                      <p className="font-semibold text-sm ml-2">₹{(Number(item.product.sellingPrice) * item.quantity).toFixed(2)}</p>
                     </div>
-                    <p className="text-xs text-muted-foreground mb-2">${item.product.sellingPrice} / unit</p>
+                    <p className="text-xs text-muted-foreground mb-2">₹{item.product.sellingPrice} / unit</p>
                     
                     <div className="flex items-center gap-2">
                       <div className="flex items-center border rounded-md h-7">
@@ -257,16 +257,16 @@ export default function POSPage() {
           <div className="space-y-1 text-sm">
             <div className="flex justify-between text-muted-foreground">
               <span>Subtotal</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span>₹{subtotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-muted-foreground">
               <span>Tax (10%)</span>
-              <span>${tax.toFixed(2)}</span>
+              <span>₹{tax.toFixed(2)}</span>
             </div>
             <Separator className="my-2" />
             <div className="flex justify-between font-bold text-lg">
               <span>Total</span>
-              <span>${total.toFixed(2)}</span>
+              <span>₹{total.toFixed(2)}</span>
             </div>
           </div>
           

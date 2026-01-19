@@ -17,7 +17,7 @@ export interface IStorage {
   // Products
   getProducts(search?: string, category?: string): Promise<Product[]>;
   getProduct(id: number): Promise<Product | undefined>;
-  createProduct(product: InsertProduct): Promise<Product>;
+  createProduct(insertProduct: InsertProduct): Promise<Product>;
   updateProduct(id: number, product: Partial<InsertProduct>): Promise<Product>;
   deleteProduct(id: number): Promise<void>;
   
@@ -171,9 +171,9 @@ export class DatabaseStorage implements IStorage {
         });
       }
 
-      // 4. Update Customer Loyalty (Simple: 1 point per 10 currency units)
+      // 4. Update Customer Loyalty (Simple: 1 point per 100 currency units in INR)
       if (data.customerId) {
-        const points = Math.floor(grandTotal / 10);
+        const points = Math.floor(grandTotal / 100);
         await tx.execute(sql`
           UPDATE customers 
           SET loyalty_points = loyalty_points + ${points}

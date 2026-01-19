@@ -108,7 +108,7 @@ export default function InventoryPage() {
                         {product.stockQuantity}
                       </span>
                     </TableCell>
-                    <TableCell className="text-right font-medium">${product.sellingPrice}</TableCell>
+                    <TableCell className="text-right font-medium">₹{product.sellingPrice}</TableCell>
                     <TableCell className="text-right">
                       <Button variant="ghost" size="icon" onClick={() => handleDelete(product.id)}>
                         <Trash2 className="h-4 w-4 text-muted-foreground hover:text-destructive" />

@@ -38,7 +38,7 @@ export default function DashboardPage() {
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">${totalRevenue.toFixed(2)}</div>
+              <div className="text-2xl font-bold">₹{totalRevenue.toFixed(2)}</div>
               <p className="text-xs text-muted-foreground mt-1">+20.1% from last month</p>
             </CardContent>
           </Card>
@@ -104,7 +104,7 @@ export default function DashboardPage() {
                     axisLine={false}
                     tickLine={false}
                     tick={{ fill: '#6b7280', fontSize: 12 }}
-                    prefix="$"
+                    prefix="₹"
                   />
                   <Tooltip 
                     cursor={{ fill: 'transparent' }}

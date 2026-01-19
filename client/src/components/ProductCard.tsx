@@ -37,7 +37,7 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
         <p className="text-xs text-muted-foreground mb-4">SKU: {product.sku}</p>
         
         <div className="flex items-baseline gap-1">
-          <span className="text-lg font-bold text-primary">${product.sellingPrice}</span>
+          <span className="text-lg font-bold text-primary">₹{product.sellingPrice}</span>
           <span className="text-xs text-muted-foreground">/unit</span>
         </div>
       </CardContent>

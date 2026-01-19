@@ -11,9 +11,10 @@ import POSPage from "@/pages/POSPage";
 import InventoryPage from "@/pages/InventoryPage";
 import CustomersPage from "@/pages/CustomersPage";
 import BillsPage from "@/pages/BillsPage";
+import PublicBillPage from "@/pages/PublicBillPage";
 import NotFound from "@/pages/not-found";
 
-function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
+function ProtectedRoute({ component: Component }: { component: React.ComponentType<any> }) {
   const { user, isLoading } = useAuth();
   const [, setLocation] = useLocation();
 
@@ -37,6 +38,9 @@ function Router() {
   return (
     <Switch>
       <Route path="/login" component={LoginPage} />
+      <Route path="/public/bill/:publicId">
+        {(params) => <PublicBillPage params={params} />}
+      </Route>
       
       {/* Protected Routes */}
       <Route path="/">

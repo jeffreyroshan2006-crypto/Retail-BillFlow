@@ -14,7 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Search, Trash2, Plus, UserPlus, ShoppingCart, Minus } from "lucide-react";
-import type { Product, InsertCustomer } from "@shared/schema";
+import type { Product, InsertCustomer, Bill } from "@shared/schema";
 
 interface CartItem {
   product: Product;
@@ -28,6 +28,7 @@ export default function POSPage() {
   const [selectedCustomerId, setSelectedCustomerId] = useState<string>("walk-in");
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isNewCustomerOpen, setIsNewCustomerOpen] = useState(false);
+  const [lastCreatedBill, setLastCreatedBill] = useState<Bill | undefined>(undefined);
 
   // Queries
   const { data: products, isLoading: isLoadingProducts } = useProducts(search, category === "all" ? undefined : category);
@@ -39,7 +40,7 @@ export default function POSPage() {
   const { toast } = useToast();
 
   // Categories logic
-  const categories = ["all", ...new Set(products?.map(p => p.category) || [])];
+  const categories = ["all", ...Array.from(new Set(products?.map(p => p.category) || []))];
 
   // Cart Logic
   const addToCart = (product: Product) => {
@@ -84,13 +85,18 @@ export default function POSPage() {
       items: cart.map(item => ({ productId: item.product.id, quantity: item.quantity })),
       discountAmount: discount
     }, {
-      onSuccess: () => {
+      onSuccess: (bill) => {
         toast({ title: "Success", description: "Bill created successfully" });
+        setLastCreatedBill(bill);
         setCart([]);
-        setIsCheckoutOpen(false);
         setSelectedCustomerId("walk-in");
       }
     });
+  };
+
+  const handleCloseCheckout = () => {
+    setIsCheckoutOpen(false);
+    setLastCreatedBill(undefined);
   };
 
   // New Customer Handler
@@ -282,10 +288,11 @@ export default function POSPage() {
 
       <CheckoutModal 
         isOpen={isCheckoutOpen} 
-        onClose={() => setIsCheckoutOpen(false)}
+        onClose={handleCloseCheckout}
         onConfirm={handleCheckout}
         totalAmount={total}
         isProcessing={createBill.isPending}
+        lastCreatedBill={lastCreatedBill}
       />
 
       {/* New Customer Dialog */}

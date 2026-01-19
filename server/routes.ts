@@ -21,8 +21,8 @@ export async function registerRoutes(
   // === Products ===
   app.get(api.products.list.path, requireAuth, async (req, res) => {
     const products = await storage.getProducts(
-      req.query.search as string, 
-      req.query.category as string
+      req.query.search as any, 
+      req.query.category as any
     );
     res.json(products);
   });

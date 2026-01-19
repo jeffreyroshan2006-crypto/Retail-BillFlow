@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { paymentModes } from "@shared/schema";
-import { Loader2, CreditCard, Banknote, Smartphone, Wallet } from "lucide-react";
+import { paymentModes, type Bill } from "@shared/schema";
+import { Loader2, CreditCard, Banknote, Smartphone, Wallet, CheckCircle2, MessageSquare, Share2 } from "lucide-react";
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -13,9 +13,10 @@ interface CheckoutModalProps {
   onConfirm: (paymentMode: typeof paymentModes[number], discount: number) => void;
   totalAmount: number;
   isProcessing: boolean;
+  lastCreatedBill?: Bill;
 }
 
-export function CheckoutModal({ isOpen, onClose, onConfirm, totalAmount, isProcessing }: CheckoutModalProps) {
+export function CheckoutModal({ isOpen, onClose, onConfirm, totalAmount, isProcessing, lastCreatedBill }: CheckoutModalProps) {
   const [paymentMode, setPaymentMode] = useState<typeof paymentModes[number]>("cash");
   const [discount, setDiscount] = useState<number>(0);
 
@@ -34,6 +35,55 @@ export function CheckoutModal({ isOpen, onClose, onConfirm, totalAmount, isProce
       default: return null;
     }
   };
+
+  const shareViaWhatsApp = () => {
+    if (!lastCreatedBill) return;
+    const url = `${window.location.origin}/public/bill/${lastCreatedBill.publicId}`;
+    const text = `Hi! Here is your bill from SuperMart POS: ${url}. Total Amount: ₹${lastCreatedBill.grandTotal}. Thank you for shopping with us!`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+  };
+
+  const shareViaSMS = () => {
+    if (!lastCreatedBill) return;
+    const url = `${window.location.origin}/public/bill/${lastCreatedBill.publicId}`;
+    const text = `SuperMart POS Bill: ${url}. Total: ₹${lastCreatedBill.grandTotal}`;
+    window.open(`sms:?body=${encodeURIComponent(text)}`);
+  };
+
+  if (lastCreatedBill) {
+    return (
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="sm:max-w-md text-center p-10">
+          <div className="flex justify-center mb-6">
+            <div className="h-16 w-16 bg-green-100 rounded-full flex items-center justify-center">
+              <CheckCircle2 className="h-10 w-10 text-green-600" />
+            </div>
+          </div>
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-display text-center">Payment Successful!</DialogTitle>
+            <DialogDescription className="text-center text-base pt-2">
+              Bill <span className="font-mono font-bold text-foreground">#{lastCreatedBill.billNumber}</span> has been generated.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="grid grid-cols-1 gap-3 mt-8">
+            <Button onClick={shareViaWhatsApp} variant="outline" className="h-12 border-green-200 hover:bg-green-50 text-green-700">
+              <MessageSquare className="mr-2 h-5 w-5" /> Share via WhatsApp
+            </Button>
+            <Button onClick={shareViaSMS} variant="outline" className="h-12 border-blue-200 hover:bg-blue-50 text-blue-700">
+              <Share2 className="mr-2 h-5 w-5" /> Share via SMS
+            </Button>
+          </div>
+
+          <div className="mt-8">
+            <Button onClick={onClose} className="w-full h-11">
+              Start New Order
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

@@ -74,8 +74,7 @@ export default function POSPage() {
 
   // Totals
   const subtotal = cart.reduce((acc, item) => acc + (Number(item.product.sellingPrice) * item.quantity), 0);
-  const tax = subtotal * 0.1; // Assuming 10% tax for simplicity, real app would sum per item tax
-  const total = subtotal + tax;
+const tax = cart.reduce((acc, item) => acc + (Number(item.product.sellingPrice) * item.quantity * (Number(item.product.taxRate) / 100)), 0);  const total = subtotal + tax;
 
   // Checkout Handler
   const handleCheckout = (paymentMode: any, discount: number) => {

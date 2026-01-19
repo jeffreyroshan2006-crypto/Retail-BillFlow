@@ -55,8 +55,7 @@ export async function registerRoutes(
       if (e instanceof z.ZodError) {
         return res.status(400).json({ message: e.errors[0].message });
       }
-      res.status(404).json({ message: "Product not found" });
-    }
+throw e;    }
   });
 
   app.delete(api.products.delete.path, requireAuth, async (req, res) => {

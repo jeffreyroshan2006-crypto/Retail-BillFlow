@@ -1,0 +1,83 @@
+"Design and develop a world-class Retail Billing System application using Supabase (PostgreSQL) as the backend database and platform. The solution must leverage Supabase features such as hosted PostgreSQL database, authentication, row-level security, and auto-generated APIs to build a secure, scalable, cloud-based system.
+​
+
+Core Requirements
+Database Design (PostgreSQL on Supabase):
+
+Design a fully normalized schema (up to 3NF) for a retail billing system with entities like products, customers, users, bills, bill_items, suppliers, and payments.
+
+Use appropriate data types, constraints (PRIMARY KEY, FOREIGN KEY, UNIQUE, NOT NULL, CHECK), and indexing strategies to ensure integrity and performance.
+​
+
+Supabase Authentication & Roles:
+
+Use Supabase Auth to manage application users (admin, manager, cashier) with secure email/password login.
+
+Map authenticated users to a users table in the database and use Row Level Security (RLS) policies to restrict access based on role and ownership where appropriate.
+​
+
+Retail Billing Features:
+
+Product Management: Add, edit, delete, and list products with fields such as Product ID, name, category, barcode/SKU, stock quantity, purchase price, selling price, tax rate, supplier, and optional expiry date.
+
+Customer Management: Store customers with Customer ID, name, phone, email, loyalty points, and basic demographics; track association with past bills.
+
+Billing / POS Module:
+
+Create new bills by scanning/entering product codes, auto-fetching prices and tax.
+
+Support discounts (percentage and flat), tax calculation (GST/VAT), and multiple payment modes (cash, UPI/card, wallet).
+
+On bill completion, automatically update inventory stock and store an itemized bill in the database.
+
+Invoice Generation: Generate a unique bill number, date/time, line items, subtotal, tax, discount, and grand total; provide a printable or downloadable layout (PDF or HTML).
+
+Security with Row Level Security (RLS):
+
+Enable RLS on all sensitive tables and define policies such that:
+
+Cashiers can only view and create bills, but not modify master data like products and suppliers.
+
+Managers/admins can view analytics, manage products, suppliers, and users.
+
+Use Supabase’s policy system with auth.uid() to reference the logged-in user in security rules.
+​
+
+Analytics & Reports:
+
+Implement SQL queries and API endpoints for:
+
+Daily, weekly, and monthly sales reports.
+
+Top-selling products.
+
+Low-stock alert report (products below threshold).
+
+Customer-wise purchase summary and high-value customers.
+
+Optionally use Supabase real-time features to reflect new sales and stock changes live on a dashboard.
+​
+
+Tech Stack & Architecture:
+
+Use Supabase as the backend (database, auth, APIs, RLS) and choose any modern frontend stack such as React, Next.js, or simple HTML/JS for the client.
+​
+
+Interact with Supabase via its JavaScript client or REST APIs for CRUD operations on all core entities.
+
+Follow a clean architecture (modular services, clear separation of UI logic and data-access layer).
+
+Deliverables (DBMS course focus):
+
+ER Diagram for the full schema, showing all entities and relationships with cardinalities.
+
+SQL schema script (PostgreSQL) that can be executed in Supabase SQL editor to recreate all tables, constraints, indexes, and RLS policies.
+​
+
+Sample data script to populate products, customers, and sample sales for demonstration.
+
+Application source code with clear documentation on how it connects to Supabase (environment variables, client initialization, etc.).
+
+Project report explaining database design, normalization, key SQL queries, RLS policies, and screenshots of the working app and dashboards.
+
+Goal: Build a professional-grade, secure, cloud-based Retail Billing System that demonstrates strong database design principles using Supabase’s managed PostgreSQL, suitable as a flagship DBMS course project and realistically deployable for a small or medium retail store."

@@ -12,6 +12,8 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
+import logoUrl from "@assets/generated_images/modern_retail_pos_logo_for_supermart.png";
+
 export function Sidebar() {
   const [location] = useLocation();
   const { user, logout } = useAuth();
@@ -28,9 +30,9 @@ export function Sidebar() {
 
   return (
     <div className="flex h-screen w-64 flex-col border-r bg-card shadow-sm">
-      <div className="flex h-16 items-center px-6 border-b">
-        <Store className="h-6 w-6 text-primary mr-2" />
-        <span className="font-display text-xl font-bold">Nexus POS</span>
+      <div className="flex h-16 items-center px-6 border-b gap-3">
+        <img src={logoUrl} alt="SuperMart Logo" className="h-8 w-8 object-contain" />
+        <span className="font-display text-xl font-bold">SuperMart POS</span>
       </div>
       
       <div className="flex-1 overflow-auto py-6 px-4">

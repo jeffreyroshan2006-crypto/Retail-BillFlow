@@ -11,6 +11,8 @@ import { Store, Loader2 } from "lucide-react";
 import { useLocation } from "wouter";
 import { useEffect } from "react";
 
+import logoUrl from "@assets/generated_images/modern_retail_pos_logo_for_supermart.png";
+
 const loginSchema = z.object({
   username: z.string().min(1, "Username is required"),
   password: z.string().min(1, "Password is required"),
@@ -44,10 +46,10 @@ export default function LoginPage() {
         <div className="relative z-10 max-w-lg text-center">
           <div className="mb-8 flex justify-center">
             <div className="p-4 bg-white/10 rounded-2xl backdrop-blur-sm border border-white/20">
-              <Store className="h-16 w-16" />
+              <img src={logoUrl} alt="SuperMart Logo" className="h-20 w-20 object-contain brightness-0 invert" />
             </div>
           </div>
-          <h1 className="text-4xl font-display font-bold mb-6">Nexus POS System</h1>
+          <h1 className="text-4xl font-display font-bold mb-6">SuperMart POS System</h1>
           <p className="text-lg text-primary-foreground/80 leading-relaxed">
             Streamline your retail operations with our advanced point of sale solution. 
             Manage inventory, billing, and customers in one place.

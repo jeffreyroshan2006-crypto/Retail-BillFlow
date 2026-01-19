@@ -1,0 +1,121 @@
+import { users, type User, type InsertUser } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
+import session from "express-session";
+import connectPg from "connect-pg-simple";
+import passport from "passport";
+import { Strategy as LocalStrategy } from "passport-local";
+import { pool } from "./db";
+import { scrypt, randomBytes, timingSafeEqual } from "crypto";
+import { promisify } from "util";
+
+const scryptAsync = promisify(scrypt);
+
+const PostgresStore = connectPg(session);
+
+export function setupAuth(app: any) {
+  const sessionSettings: session.SessionOptions = {
+    store: new PostgresStore({ pool, createTableIfMissing: true }),
+    secret: process.env.SESSION_SECRET || "super secret session key",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    },
+  };
+
+  if (app.get("env") === "production") {
+    app.set("trust proxy", 1);
+  }
+
+  app.use(session(sessionSettings));
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  passport.use(
+    new LocalStrategy(async (username, password, done) => {
+      try {
+        const [user] = await db
+          .select()
+          .from(users)
+          .where(eq(users.username, username))
+          .limit(1);
+
+        if (!user) {
+          return done(null, false, { message: "Incorrect username." });
+        }
+
+        const [salt, key] = user.password.split(":");
+        const hashedBuffer = (await scryptAsync(password, salt, 64)) as Buffer;
+
+        const keyBuffer = Buffer.from(key, "hex");
+        const match = timingSafeEqual(hashedBuffer, keyBuffer);
+
+        if (!match) {
+          return done(null, false, { message: "Incorrect password." });
+        }
+
+        return done(null, user);
+      } catch (err) {
+        return done(err);
+      }
+    }),
+  );
+
+  passport.serializeUser((user, done) => {
+    done(null, (user as User).id);
+  });
+
+  passport.deserializeUser(async (id: number, done) => {
+    try {
+      const [user] = await db
+        .select()
+        .from(users)
+        .where(eq(users.id, id))
+        .limit(1);
+      done(null, user);
+    } catch (err) {
+      done(err);
+    }
+  });
+
+  app.post("/api/login", (req: any, res: any, next: any) => {
+    passport.authenticate("local", (err: any, user: any, info: any) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        return res.status(401).json({ message: info.message ?? "Authentication failed" });
+      }
+      req.logIn(user, (err: any) => {
+        if (err) {
+          return next(err);
+        }
+        return res.status(200).json(user);
+      });
+    })(req, res, next);
+  });
+
+  app.post("/api/logout", (req: any, res: any, next: any) => {
+    req.logout((err: any) => {
+      if (err) {
+        return next(err);
+      }
+      res.sendStatus(200);
+    });
+  });
+
+  app.get("/api/user", (req: any, res: any) => {
+    if (req.isAuthenticated()) {
+      res.json(req.user);
+    } else {
+      res.status(200).json(null); // Return null instead of 401 for "me" check
+    }
+  });
+}
+
+export async function hashPassword(password: string) {
+  const salt = randomBytes(16).toString("hex");
+  const buf = (await scryptAsync(password, salt, 64)) as Buffer;
+  return `${salt}:${buf.toString("hex")}`;
+}
